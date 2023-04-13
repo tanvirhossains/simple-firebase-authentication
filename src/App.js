@@ -11,10 +11,10 @@ function App() {
   const facebookProvider = new FacebookAuthProvider()
 
 
-  const handlaSignIn = () => {
+  const handleSignIn = () => {
     signInWithPopup(auth, googleProvider)
-      .then(result => {
-        const user = result.user
+      .then(google => {
+        const user = google.user
         setUser(user)
         console.log(user)
       })
@@ -35,22 +35,22 @@ function App() {
       })
   }
 
-  const handlaFBSignIn = ( ) =>{
-    signInWithPopup(auth ,facebookProvider)
+  const handleFBSignIn = () => {
+    signInWithPopup(auth, facebookProvider)
 
-    .then(result =>{
-      const user = result.user 
-      setUser(user)
-      console.log(user)
-    })
-    .error(error =>{
-      console.log(error)
-    })
+      .then(result => {
+        const user = result.user
+        setUser(user)
+        console.log(user)
+      })
+      .error(error => {
+        console.log(error)
+      })
   }
 
   const signOutButton = () => {
     signOut(auth)
-      .then(() => { 
+      .then(() => {
         setUser({})
       })
       .catch(error => {
@@ -63,18 +63,21 @@ function App() {
   return (
     <div className="App">
       {
-        user.uid ? <button onClick={signOutButton}>Sign out </button> :
+        user.uid ? <>
+          <button onClick={signOutButton}>Sign out </button>
+
+          <h1>Name: {user.displayName}{user?.reloadUserInfo?.screenName}</h1>
+          <h5>Email: {user.email}</h5>
+          <img src={user.photoURL} alt="" />
+        </> :
           <>
-            <button onClick={handlaSignIn}>Google sign in </button>
-            <button onClick={handlaFBSignIn}>Facebook sign in </button>
+            <button onClick={handleSignIn}>Google sign in </button>
+            <button onClick={handleFBSignIn}>Facebook sign in </button>
             <button onClick={handleGitSignIn} >GitHub sign in</button>
           </>
       }
 
 
-      <h1>Name: {user.displayName}</h1>
-      <h5>Email: {user.email}</h5>
-      <img src={user.photoURL} alt="" />
 
     </div>
 
